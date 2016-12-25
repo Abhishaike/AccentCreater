@@ -55,6 +55,7 @@ AMERICAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=61",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=112"]
 
 '''
+TEST DATA:
 
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=114",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=120",
@@ -102,3 +103,17 @@ for x in AMERICAN:
 	AmericanCombined += sound
 
 AmericanCombined.export("TESTER/AMERICAN/AMERICAN.wav", format='wav')
+
+
+
+page = urllib.urlopen("http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=426", 'lxml')
+html = page.read()
+soup = BeautifulSoup(html)
+x = soup.audio.source
+y = x.get('src')
+urllib.urlretrieve (y, "TESTER/INDIAN/INDIANTEST.mp3")
+AudioSegment.from_mp3("TESTER/INDIAN/INDIANTEST.mp3").export("TESTER/INDIAN/INDIANTEST.wav", format="wav")
+sound = AudioSegment.from_file("TESTER/INDIAN/INDIANTEST.wav")
+sound.export("TESTER/INDIAN/INDIANTEST.wav", format='wav')
+
+
