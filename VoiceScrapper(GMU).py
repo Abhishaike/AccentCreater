@@ -54,6 +54,7 @@ AMERICAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=61",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=109",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=112"]
 
+'''
 
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=114",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=120",
@@ -70,6 +71,8 @@ AMERICAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=61",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=138",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=142",
 "http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=145"]
+
+'''
 
 IndianCombined = AudioSegment.empty()
 for x in INDIAN:
