@@ -1,3 +1,26 @@
+from sklearn.mixture import GMM
+from sklearn import mixture
+from python_speech_features import mfcc
+from python_speech_features import logfbank
+from python_speech_features import ssc
+from python_speech_features import fbank
+from python_speech_features import lifter
+
+from scipy.fftpack import dct
+import pandas as pd
+import numpy as np
+import scipy.io.wavfile as wav
+import wave
+from pydub import AudioSegment
+from sklearn import preprocessing
+import matplotlib.pyplot as plt
+from bs4 import BeautifulSoup
+from urllib2 import urlopen
+import urllib
+import urllib2
+import requests 
+
+
 IndianCombined = AudioSegment.empty()
 for x in INDIAN:
 	page = urllib.urlopen(x, 'lxml')
