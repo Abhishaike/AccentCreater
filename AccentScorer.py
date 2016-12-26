@@ -5,6 +5,7 @@ from python_speech_features import logfbank
 from python_speech_features import ssc
 from python_speech_features import fbank
 from python_speech_features import lifter
+
 from scipy.fftpack import dct
 import pandas as pd
 import numpy as np
@@ -19,11 +20,135 @@ import urllib
 import urllib2
 import requests 
 
+
+INDIAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=207",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=587",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=593",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=910",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1017",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1437",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1697",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1966",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2206",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2209",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2236",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2242",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2303",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2353",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2354"]
+
+
+
+AMERICAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=61",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=110",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=132",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=73",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=74",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=76",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=81",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=83",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=84",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=92",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=95",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=105",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=106",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=109",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=112"]
+
+AUSTRALIAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=131",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=136",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=140",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=148",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=485",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=525",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=529",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=533",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=776",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=961",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1072",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1085",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1352",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1377",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1547"]
+
+TESTAUSTRALIAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=1733",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2104",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2172"]
+
+TESTAMERICAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=114",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=120",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=122",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=124",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=125",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=127",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=128",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=129",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=130",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=133",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=134",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=137",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=138",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=142",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=145"]
+
+TESTINDIAN = ["http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=199", 
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=198",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2286",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=2350",
+"http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=265"]
+
+
+
+
+IndianCombined = AudioSegment.empty()
+for x in INDIAN:
+	page = urllib.urlopen(x, 'lxml')
+	html = page.read()
+	soup = BeautifulSoup(html)
+	x = soup.audio.source
+	y = x.get('src')
+	urllib.urlretrieve (y, "TESTER/INDIAN/INDIAN.mp3")
+	AudioSegment.from_mp3("TESTER/INDIAN/INDIAN.mp3").export("TESTER/INDIAN/INDIAN.wav", format="wav")
+	sound = AudioSegment.from_file("TESTER/INDIAN/INDIAN.wav")
+	IndianCombined += sound
+
+IndianCombined.export("TESTER/INDIAN/INDIAN.wav", format='wav')
+
+
+AmericanCombined = AudioSegment.empty()
+for x in AMERICAN:
+	page = urllib.urlopen(x, 'lxml')
+	html = page.read()
+	soup = BeautifulSoup(html)
+	x = soup.audio.source
+	y = x.get('src')
+	urllib.urlretrieve (y, "TESTER/AMERICAN/AMERICAN.mp3")
+	AudioSegment.from_mp3("TESTER/AMERICAN/AMERICAN.mp3").export("TESTER/AMERICAN/AMERICAN.wav", format="wav")
+	sound = AudioSegment.from_file("TESTER/AMERICAN/AMERICAN.wav")
+	AmericanCombined += sound
+
+AmericanCombined.export("TESTER/AMERICAN/AMERICAN.wav", format='wav')
+
+
+AustralianCombined = AudioSegment.empty()
+for x in AUSTRALIAN:
+	page = urllib.urlopen(x, 'lxml')
+	html = page.read()
+	soup = BeautifulSoup(html)
+	x = soup.audio.source
+	y = x.get('src')
+	urllib.urlretrieve (y, "TESTER/AUSTRALIAN/AUSTRALIAN.mp3")
+	AudioSegment.from_mp3("TESTER/AUSTRALIAN/AUSTRALIAN.mp3").export("TESTER/AUSTRALIAN/AUSTRALIAN.wav", format="wav")
+	sound = AudioSegment.from_file("TESTER/AUSTRALIAN/AUSTRALIAN.wav")
+	AustralianCombined += sound
+
+AustralianCombined.export("TESTER/AUSTRALIAN/AUSTRALIAN.wav", format='wav')
+
+
+
 ####################################
-'''
-Taken from https://github.com/jameslyons/python_speech_features, and added here. Extracts a 12 dimensional 
-feature vector every .025 seconds (with a .015 window)
-'''
+
+
 def mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
          nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,ceplifter=22,appendEnergy=False,
          winfunc=lambda x:np.ones((x,))):
@@ -35,10 +160,7 @@ def mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
     return feat
 
 ####################################
-'''
-Taken from https://github.com/jameslyons/python_speech_features, and added here. Extracts a 12 dimensional feature vector 
-from the original MFCC vector that includes the velocity of the window (if done once) and the acceleration (if done twice). 
-'''
+
 def delta(feat, N): #definition for delta function used in the MFCC feature extraction 
 	NUMFRAMES = len(feat)
 	feat = np.concatenate(([feat[0] for i in range(N)], feat, [feat[-1] for i in range(N)]))
@@ -50,63 +172,94 @@ def delta(feat, N): #definition for delta function used in the MFCC feature extr
 
 ####################################
 
-(rate,sig) = wav.read("TESTER/INDIAN/INDIAN.wav") #saves the rate and signals of the .wav file of the Indian accent group
-mfcc_feat = mfcc(sig,rate, numcep = 12) #extracts a 12 dimensional vector every .025 seconds (with a .015 window) from the .wav file
-d1_feat = delta(mfcc_feat, 2) #gets a 12 dimensional vector of the velocity 
-d2_feat = delta(d1_feat,2) #gets a 12 dimensional vector of the acceleration 
+(rate,sig) = wav.read("TESTER/INDIAN/INDIAN.wav")
+MFCC_ACCENT_INDIAN = mfcc(sig,rate, numcep = 12)
+DELTA_ACCENT_INDIAN = delta(MFCC_ACCENT_INDIAN, 2)
+DELTA2_ACCENT_INDIAN = delta(DELTA_ACCENT_INDIAN,2)
 
-X = pd.concat([pd.DataFrame(mfcc_feat),pd.DataFrame(d1_feat),pd.DataFrame(d2_feat)],  axis=1) #36 dimensional dataframe of the MFCC, Delta1 (first derivative), and Delta1 (second derivative)
-X = preprocessing.scale(X) #scales each parameter of X, to normalize everything to be from between 0 and 1
+ACCENT_INDIAN_FEATURES = pd.concat([pd.DataFrame(MFCC_ACCENT_INDIAN),pd.DataFrame(DELTA_ACCENT_INDIAN),pd.DataFrame(DELTA2_ACCENT_INDIAN)],  axis=1) #39 dimensional dataframe of the MFCC, Delta1 (first derivative), and Delta1 (second derivative)
+ACCENT_INDIAN_FEATURES = preprocessing.scale(ACCENT_INDIAN_FEATURES)
 
-gmmIndian = mixture.GaussianMixture(n_components = 10, max_iter=1000, tol = .01, warm_start = True) #creates a gaussian mixture model (GMM) of X, using 10 components
-gmmIndian.fit(X) #fit the created GMM to X
-
-
-####################################
-
-(TestRate,TestSig) = wav.read("TESTER/AMERICAN/AMERICAN.wav") #saves the rate and signals of the .wav file of the American accent group
-TestMFCC_Feat = mfcc(TestSig,TestRate,  numcep = 12) #extracts a 12 dimensional vector every .025 seconds (with a .015 window) from the .wav file
-TestD1_FEAT = delta(TestMFCC_Feat, 2)#gets a 12 dimensional vector of the velocity 
-TestD2_FEAT = delta(TestD1_FEAT,2) #gets a 12 dimensional vector of the acceleration 
-
-A = pd.concat([pd.DataFrame(TestMFCC_Feat),pd.DataFrame(TestD1_FEAT),pd.DataFrame(TestD2_FEAT)],  axis=1) #36 dimensional dataframe of the MFCC, Delta1 (first derivative), and Delta1 (second derivative)
-A = preprocessing.scale(A)#scales each parameter of A, to normalize everything to be from between 0 and 1
-
-gmmAmerican = mixture.GaussianMixture(n_components = 10, max_iter=1000, tol = .01, warm_start = True) #creates a gaussian mixture model (GMM) of X, using 10 components
-gmmAmerican.fit(A)#fit the created GMM to X
-
-####################################
-
-(newrate,newsig) = wav.read("Vincent.wav") #saves the rate and signals of the .wav file of the input 
-Newmfcc_feat = mfcc(newsig,newrate, numcep = 12)#extracts a 12 dimensional vector every .025 seconds (with a .015 window) from the .wav file
-Newd1_feat = delta(Newmfcc_feat, 2)#gets a 12 dimensional vector of the velocity 
-Newd2_feat = delta(Newd1_feat,2)#gets a 12 dimensional vector of the acceleration
-
-Z = pd.concat([pd.DataFrame(Newmfcc_feat),pd.DataFrame(Newd1_feat), pd.DataFrame(Newd2_feat)],  axis=1) #36 dimensional dataframe of the MFCC, Delta1 (first derivative), and Delta1 (second derivative)
-Z = preprocessing.scale(Z)#scales each parameter of Z, to normalize everything to be from between 0 and 1
-
-INDIAN = (gmmIndian.score_samples(Z)) #find the probability of Z in regards to the model of the indian accent
-AMERICAN = (gmmAmerican.score_samples(Z)) #find the probability of Z in regards to the model of the american accent
+ACCENT_INDIAN = mixture.GaussianMixture(n_components = 35, max_iter=1000, tol = .01, warm_start = True, covariance_type = 'diag')
+ACCENT_INDIAN.fit(ACCENT_INDIAN_FEATURES)
 
 
 ####################################
 
-STATES = pd.DataFrame({0 : xrange(0, len(INDIAN))}) #create a dataframe (numbers used are arbitrary)
-for x in xrange(0,len(INDIAN)): #for loop that decides if the probability of a specific window of time in the input file is more indian or american, and assigns a 'state' to each. 0 is Indian, 1 is American
-	if (INDIAN[x] > AMERICAN[x]):
-		STATES[x:x+1] = 0;
-	if (INDIAN[x] < AMERICAN[x]):
-		STATES[x:x+1] = 1;
+(TestRate,TestSig) = wav.read("TESTER/AMERICAN/AMERICAN.wav") #MFCC feature creation 
+MFCC_ACCENT_AMERICAN = mfcc(TestSig,TestRate,  numcep = 12)
+DELTA_ACCENT_AMERICAN = delta(MFCC_ACCENT_AMERICAN, 2)
+DELTA2_ACCENT_AMERICAN = delta(DELTA_ACCENT_AMERICAN,2)
 
-STATES = STATES.squeeze()
-UnFormatedCounts = STATES.value_counts() 
-print "UNFORMATTED COUNT:"
-print UnFormatedCounts #displays total amount of 0's (Indian Accent) and 1's (American Accent)
+ACCENT_AMERICAN_FEATURES = pd.concat([pd.DataFrame(MFCC_ACCENT_AMERICAN),pd.DataFrame(DELTA_ACCENT_AMERICAN),pd.DataFrame(DELTA2_ACCENT_AMERICAN)],  axis=1)
+ACCENT_AMERICAN_FEATURES = preprocessing.scale(ACCENT_AMERICAN_FEATURES)
 
+ACCENT_AMERICAN = mixture.GaussianMixture(n_components = 35, max_iter=1000, tol = .01, warm_start = True, covariance_type = 'diag')
+ACCENT_AMERICAN.fit(ACCENT_AMERICAN_FEATURES)
+
+####################################
+
+(TestRate,TestSig) = wav.read("TESTER/AUSTRALIAN/AUSTRALIAN.wav") #MFCC feature creation 
+MFCC_ACCENT_AUSTRALIAN = mfcc(TestSig,TestRate,  numcep = 12)
+DELTA_ACCENT_AUSTRALIAN = delta(MFCC_ACCENT_AUSTRALIAN, 2)
+DELTA2_ACCENT_AUSTRALIAN = delta(DELTA_ACCENT_AUSTRALIAN,2)
+
+ACCENT_AUSTRALIAN_FEATURES = pd.concat([pd.DataFrame(MFCC_ACCENT_AUSTRALIAN),pd.DataFrame(DELTA_ACCENT_AUSTRALIAN),pd.DataFrame(DELTA2_ACCENT_AUSTRALIAN)],  axis=1)
+ACCENT_AUSTRALIAN_FEATURES = preprocessing.scale(ACCENT_AUSTRALIAN_FEATURES)
+
+ACCENT_AUSTRALIAN = mixture.GaussianMixture(n_components = 35, max_iter=1000, tol = .01, warm_start = True, covariance_type = 'diag' )
+ACCENT_AUSTRALIAN.fit(ACCENT_AUSTRALIAN_FEATURES)
+
+
+
+####################################
+
+for z in TESTAUSTRALIAN:
+	page = urllib.urlopen(z, 'lxml')
+	html = page.read()
+	soup = BeautifulSoup(html)
+	p = soup.audio.source
+	y = p.get('src')
+	urllib.urlretrieve (y, "TESTER/TEST/TEST.mp3")
+	AudioSegment.from_mp3("TESTER/TEST/TEST.mp3").export("TESTER/TEST/TEST.wav", format="wav")
+	sound = AudioSegment.from_file("TESTER/TEST/TEST.wav")
+	sound.export("TESTER/TEST/TEST.wav", format='wav')
+	(newrate,newsig) = wav.read("TESTER/TEST/TEST.wav") #MFCC feature creation 
+	Newmfcc_feat = mfcc(newsig,newrate, numcep = 12)
+	Newd1_feat = delta(Newmfcc_feat, 2)
+	Newd2_feat = delta(Newd1_feat,2)
+	NEW_VOICE = pd.concat([pd.DataFrame(Newmfcc_feat),pd.DataFrame(Newd1_feat), pd.DataFrame(Newd2_feat)],  axis=1)
+	NEW_VOICE = preprocessing.scale(NEW_VOICE)
+	ACCENT_ONE_SCORE = (ACCENT_INDIAN.score_samples(NEW_VOICE))
+	ACCENT_TWO_SCORE = (ACCENT_AUSTRALIAN.score_samples(NEW_VOICE))
+	STATES = pd.DataFrame({0 : xrange(0, len(ACCENT_ONE_SCORE))})
+	for x in xrange(0,len(ACCENT_ONE_SCORE)):
+		if (ACCENT_ONE_SCORE[x] > ACCENT_TWO_SCORE[x]):
+			STATES[x:x+1] = 0;
+		if (ACCENT_ONE_SCORE[x] < ACCENT_TWO_SCORE[x]):
+			STATES[x:x+1] = 1;
+	STATES = STATES.squeeze()
+	UnFormatedCounts = STATES.value_counts()
+	print "UNFORMATTED COUNT:"
+	print UnFormatedCounts
+	if (UnFormatedCounts[0] > UnFormatedCounts[1]):
+		Accent = 0
+	else:
+		Accent = 1
+	STATES = pd.Series(STATES)
+	step = 8
+	for t in xrange(0,len(STATES),step):
+		summer = STATES[t:(t+step)].sum()
+		if (summer >= (step)/2):
+			for p in xrange(t, t+step):
+				STATES[p:p+1] = Accent
+	FormatedCounts = STATES.value_counts()
+	print"FORMATTED COUNT:"
+	print FormatedCounts
 
 
 '''
-Below is an experimental algorithm to 'clean up' the state probability (assignment of 0's and 1's). 
+Above is an experimental algorithm to 'clean up' the state probability (assignment of 0's and 1's). 
 This algorithim operates under the assumption that, with the 'curse of dimensionality', the log probability of any given 
 'score' will be extremely low. Only with a holisitic approach to ALL the probabilities can you know which classification the 
 entire input file is. And that's how many academic papers have approached this issue in the past, by only paying attention to
@@ -156,20 +309,4 @@ method, as it allows us to look closer at the more probable areas where the acce
 
 '''
 
-if (UnFormatedCounts[0] > UnFormatedCounts[1]):
-	Accent = 0
-else:
-	Accent = 1
-	
-STATES = pd.Series(STATES)
-step = 4
-for t in xrange(0,len(STATES),step):
-	summer = STATES[t:(t+step)].sum()
-	if (summer >= (step)/2):
-		for p in xrange(t, t+step):
-			STATES[p:p+1] = Accent
-
-FormatedCounts = STATES.value_counts()
-print"FORMATTED COUNT:"
-print FormatedCounts
 
