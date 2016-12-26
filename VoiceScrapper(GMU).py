@@ -1,27 +1,5 @@
-from sklearn.mixture import GMM
-from sklearn import mixture
-from python_speech_features import mfcc
-from python_speech_features import logfbank
-from python_speech_features import ssc
-from python_speech_features import fbank
-from python_speech_features import lifter
-from scipy.fftpack import dct
-import pandas as pd
-import numpy as np
-import scipy.io.wavfile as wav
-import wave
-from pydub import AudioSegment
-from sklearn import preprocessing
-import matplotlib.pyplot as plt
-from bs4 import BeautifulSoup
-from urllib2 import urlopen
-import urllib
-import urllib2
-import requests 
-
-
 IndianCombined = AudioSegment.empty()
-for x in FILE:
+for x in INDIAN:
 	page = urllib.urlopen(x, 'lxml')
 	html = page.read()
 	soup = BeautifulSoup(html)
@@ -50,15 +28,16 @@ for x in AMERICAN:
 AmericanCombined.export("TESTER/AMERICAN/AMERICAN.wav", format='wav')
 
 
+AustralianCombined = AudioSegment.empty()
+for x in AUSTRALIAN:
+	page = urllib.urlopen(x, 'lxml')
+	html = page.read()
+	soup = BeautifulSoup(html)
+	x = soup.audio.source
+	y = x.get('src')
+	urllib.urlretrieve (y, "TESTER/AUSTRALIAN/AUSTRALIAN.mp3")
+	AudioSegment.from_mp3("TESTER/AUSTRALIAN/AUSTRALIAN.mp3").export("TESTER/AUSTRALIAN/AUSTRALIAN.wav", format="wav")
+	sound = AudioSegment.from_file("TESTER/AUSTRALIAN/AUSTRALIAN.wav")
+	AustralianCombined += sound
 
-page = urllib.urlopen("http://accent.gmu.edu/searchsaa.php?function=detail&speakerid=426", 'lxml')
-html = page.read()
-soup = BeautifulSoup(html)
-x = soup.audio.source
-y = x.get('src')
-urllib.urlretrieve (y, "TESTER/INDIAN/INDIANTEST.mp3")
-AudioSegment.from_mp3("TESTER/INDIAN/INDIANTEST.mp3").export("TESTER/INDIAN/INDIANTEST.wav", format="wav")
-sound = AudioSegment.from_file("TESTER/INDIAN/INDIANTEST.wav")
-sound.export("TESTER/INDIAN/INDIANTEST.wav", format='wav')
-
-
+AustralianCombined.export("TESTER/AUSTRALIAN/AUSTRALIAN.wav", format='wav')
