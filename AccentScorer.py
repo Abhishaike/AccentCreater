@@ -5,7 +5,6 @@ from python_speech_features import logfbank
 from python_speech_features import ssc
 from python_speech_features import fbank
 from python_speech_features import lifter
-
 from scipy.fftpack import dct
 import pandas as pd
 import numpy as np
