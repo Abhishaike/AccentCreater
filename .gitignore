@@ -9,3 +9,4 @@ Apop/build
 App/captures
 App/.externalNativeBuild
 
+*.pyc
