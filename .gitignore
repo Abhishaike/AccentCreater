@@ -1,0 +1,11 @@
+Backend/env/*
+App/*.iml
+App/.gradle
+App/local.properties
+App/.idea/workspace.xml
+App/.idea/libraries
+App/.DS_Store
+Apop/build
+App/captures
+App/.externalNativeBuild
+
