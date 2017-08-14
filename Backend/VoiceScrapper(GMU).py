@@ -20,15 +20,17 @@ import urllib
 import urllib2
 import requests 
 
+import DataHolder
+
 
 IndianCombined = AudioSegment.empty()
-for x in INDIAN:
+for x in DataHolder.INDIAN:
 	page = urllib.urlopen(x, 'lxml')
 	html = page.read()
-	soup = BeautifulSoup(html)
+	soup = BeautifulSoup(html, "html.parser")
 	x = soup.audio.source
 	y = x.get('src')
-	urllib.urlretrieve (y, "TESTER/INDIAN/INDIAN.mp3")
+	urllib.urlretrieve(y, "TESTER/INDIAN/INDIAN.mp3")
 	AudioSegment.from_mp3("TESTER/INDIAN/INDIAN.mp3").export("TESTER/INDIAN/INDIAN.wav", format="wav")
 	sound = AudioSegment.from_file("TESTER/INDIAN/INDIAN.wav")
 	IndianCombined += sound
@@ -37,10 +39,10 @@ IndianCombined.export("TESTER/INDIAN/INDIAN.wav", format='wav')
 
 
 AmericanCombined = AudioSegment.empty()
-for x in AMERICAN:
+for x in DataHolder.AMERICAN:
 	page = urllib.urlopen(x, 'lxml')
 	html = page.read()
-	soup = BeautifulSoup(html)
+	soup = BeautifulSoup(html, "html.parser")
 	x = soup.audio.source
 	y = x.get('src')
 	urllib.urlretrieve (y, "TESTER/AMERICAN/AMERICAN.mp3")
@@ -52,10 +54,10 @@ AmericanCombined.export("TESTER/AMERICAN/AMERICAN.wav", format='wav')
 
 
 AustralianCombined = AudioSegment.empty()
-for x in AUSTRALIAN:
+for x in DataHolder.AUSTRALIAN:
 	page = urllib.urlopen(x, 'lxml')
 	html = page.read()
-	soup = BeautifulSoup(html)
+	soup = BeautifulSoup(html, "html.parser")
 	x = soup.audio.source
 	y = x.get('src')
 	urllib.urlretrieve (y, "TESTER/AUSTRALIAN/AUSTRALIAN.mp3")
