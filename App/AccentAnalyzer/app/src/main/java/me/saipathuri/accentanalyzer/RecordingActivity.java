@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSMobileClient;
@@ -20,6 +23,7 @@ public class RecordingActivity extends AppCompatActivity {
     private Button mRecordButton;
     private Button mPlayButton;
     private Button mNextButton;
+    private Spinner mLanguageSelectSpinner;
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
@@ -27,6 +31,7 @@ public class RecordingActivity extends AppCompatActivity {
     private boolean isRecording = false;
     private boolean isPlaying = false;
     private boolean hasRecordedOnce = false;
+    private boolean hasFinishedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +40,23 @@ public class RecordingActivity extends AppCompatActivity {
 
         mRecordButton = (Button) findViewById(R.id.btn_record);
         mPlayButton = (Button) findViewById(R.id.btn_play);
+
+        // set play button to be disabled until recording is completed
+        mPlayButton.setEnabled(false);
+
         mNextButton = (Button) findViewById(R.id.btn_recording_next);
 
-        getUserIdentity();
+
+        mLanguageSelectSpinner = (Spinner) findViewById(R.id.spinner_language_select);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.languages_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mLanguageSelectSpinner.setAdapter(adapter);
+
+        setFileName();
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +70,10 @@ public class RecordingActivity extends AppCompatActivity {
                 } else{
                     mRecordButton.setText("Start recording");
                     Toast.makeText(RecordingActivity.this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                    if(hasRecordedOnce) {
+                        hasFinishedOnce = true;
+                        mPlayButton.setEnabled(true);
+                    }
                     stopRecording();
                 }
             }
@@ -75,9 +98,11 @@ public class RecordingActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasRecordedOnce) {
+                if(hasRecordedOnce && hasFinishedOnce) {
                     Intent startUploadActivityIntent = new Intent(RecordingActivity.this, UploadingActivity.class);
                     startUploadActivityIntent.putExtra(Constants.FILENAME_KEY, mFileName);
+                    Log.d(TAG, "selected language: " + String.valueOf(mLanguageSelectSpinner.getSelectedItem()));
+                    startUploadActivityIntent.putExtra(Constants.SELECTED_LANGUAGE_KEY, String.valueOf(mLanguageSelectSpinner.getSelectedItem()));
                     startActivity(startUploadActivityIntent);
                 } else{
                     Toast.makeText(RecordingActivity.this, "Record something first", Toast.LENGTH_SHORT).show();
@@ -124,7 +149,8 @@ public class RecordingActivity extends AppCompatActivity {
         mPlayer = null;
     }
 
-    private void getUserIdentity(){
+    // set the saved file name as the cognito id
+    private void setFileName(){
         AWSMobileClient.defaultMobileClient()
                 .getIdentityManager()
                 .getUserID(new IdentityHandler() {

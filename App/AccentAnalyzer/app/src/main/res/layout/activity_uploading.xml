@@ -10,7 +10,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_marginTop="100dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +19,26 @@
         android:textSize="16dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/tv_upload_message"
-        android:layout_above="@id/pb_upload"/>
+        android:layout_below="@id/pb_upload"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_server_processing"
+        android:layout_below="@id/tv_upload_message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Processing. Please wait."
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/pb_server_processing"
+        android:id="@+id/tv_processing_msg"
+        android:visibility="invisible"/>
+
 
 
 </RelativeLayout>

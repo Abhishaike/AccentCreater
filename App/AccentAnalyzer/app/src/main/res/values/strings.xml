@@ -1,6 +1,11 @@
 <resources>
 
-
+    <!-- Options available for Language -->
+    <string-array name="languages_array">
+        <item>American</item>
+        <item>Chinese</item>
+        <item>Indian</item>
+    </string-array>
     <!-- CUSTOMIZE THESE FOR YOUR APP -->
 
     <string name="app_name">AccentAnalyzer</string>

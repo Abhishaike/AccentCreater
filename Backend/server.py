@@ -16,23 +16,24 @@ def allowed_file(filename):
 def process():
 	if request.method == 'POST':
 		s3_filename = request.form['s3_filename']
+		selected_language = request.form['selected_language']
 
-		return process_file(s3_filename)
+		return process_file(s3_filename, selected_language)
 
-def process_file(s3_filename):
+def process_file(s3_filename, selected_language):
 	download_location = "tmp/"+s3_filename+".3gp"
 	try:
 		download_file(s3_filename, download_location)
 	except Exception as e:
 		print e
-		response = make_response(jsonify({'error': 'internal server error', 'result':'none'}),500)
+		response = make_response(jsonify({'error': 'internal server error', 'result':'none', 'comparedTo': 'none'}),500)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 
-	accent = analyze_accent(download_location)
+	accent = analyze_accent(download_location, selected_language)
 	os.remove(download_location)
 
-	response = make_response(jsonify({'error': 'none', 'result':accent}),200)
+	response = make_response(jsonify({'error': 'none', 'result': accent, 'comparedTo': selected_language}),200)
 	response.headers['Content-Type'] = 'application/json'
 	return response
 
@@ -41,7 +42,7 @@ def download_file(s3_filename, download_location):
 	s3.download_file("accentanalyzer-userfiles-mobilehub-545605178", "uploads/"+s3_filename, download_location)
 	
 
-def analyze_accent(filepath):
+def analyze_accent(filepath, selected_language):
 	# TODO: implement actual analysis
 	return 'To Be Implemented'
 

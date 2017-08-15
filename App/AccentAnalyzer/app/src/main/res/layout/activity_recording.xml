@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:text="Record yourself, hit next when done"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
@@ -48,5 +48,22 @@
         android:id="@+id/btn_recording_next"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Language: "
+        android:textSize="20sp"
+        android:id="@+id/tv_language_msg"
+        android:layout_marginTop="100dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_language_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_language_msg"
+        android:layout_toRightOf="@id/tv_language_msg"
+        android:layout_marginTop="100dp"
+        />
 
 </RelativeLayout>

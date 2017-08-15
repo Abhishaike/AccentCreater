@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSConfiguration;
@@ -22,14 +24,21 @@ import com.androidnetworking.interfaces.UploadProgressListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 
 public class UploadingActivity extends AppCompatActivity {
 
     private static final String TAG = "UploadingActivity";
+
     private ProgressBar mUploadProgressBar;
+    private ProgressBar mProcessingProgressBar;
+    private TextView mProcessingTextView;
+    private TextView mUploadingTextView;
+
     private String mFileName;
+    private String mSelectedLanguage;
     private Intent startResultActivityIntent;
 
     @Override
@@ -38,9 +47,13 @@ public class UploadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_uploading);
 
         mUploadProgressBar = (ProgressBar) findViewById(R.id.pb_upload);
+        mProcessingProgressBar = (ProgressBar) findViewById(R.id.pb_server_processing);
+        mProcessingTextView = (TextView) findViewById(R.id.tv_processing_msg);
+        mUploadingTextView = (TextView) findViewById(R.id.tv_upload_message);
 
         Intent intentThatStartedThisActivity = getIntent();
         mFileName = intentThatStartedThisActivity.getStringExtra(Constants.FILENAME_KEY);
+        mSelectedLanguage = intentThatStartedThisActivity.getStringExtra(Constants.SELECTED_LANGUAGE_KEY);
 
         startResultActivityIntent = new Intent(this, ResultActivity.class);
 
@@ -62,6 +75,9 @@ public class UploadingActivity extends AppCompatActivity {
                             public void onSuccess(ContentItem contentItem) {
                                 Log.d(TAG, "filename: " + file.getName());
                                 Toast.makeText(UploadingActivity.this, "Upload Completed.", Toast.LENGTH_SHORT).show();
+                                mUploadingTextView.setText("Upload Completed.");
+
+                                showProcessingViews();
                                 postServer(file.getName());
                             }
 
@@ -92,7 +108,8 @@ public class UploadingActivity extends AppCompatActivity {
 
     public void postServer(String filename){
         AndroidNetworking.post(Constants.URL)
-                .addBodyParameter("s3_filename", filename)
+                .addBodyParameter(Constants.SERVER_REQUEST_FILENAME_KEY, filename)
+                .addBodyParameter(Constants.SERVER_REQUEST_SELECTED_LANGUAGE_KEY, mSelectedLanguage)
                 .setPriority(Priority.IMMEDIATE)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -100,11 +117,15 @@ public class UploadingActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // do anything with response
                         try {
-                            String error = response.getString("error");
-                            String result = response.getString("result");
+                            String error = response.getString(Constants.SERVER_RESPONSE_ERROR_KEY);
+                            String result = response.getString(Constants.SERVER_RESPONSE_ACCENT_KEY);
+                            String selectedLanguage = response.getString(Constants.SERVER_RESPONSE_COMPARED_LANGUAGE_KEY);
+
                             startResultActivityIntent.putExtra(Constants.ERROR_KEY, error);
                             startResultActivityIntent.putExtra(Constants.RESULTS_KEY, result);
+                            startResultActivityIntent.putExtra(Constants.SELECTED_LANGUAGE_KEY, selectedLanguage);
 
+                            finishProcessingViews();
                             Handler handler = new Handler();
                             Runnable startActivityRunnable = new Runnable() {
                                 @Override
@@ -116,6 +137,7 @@ public class UploadingActivity extends AppCompatActivity {
 
                             Log.d(TAG, "error: " + error);
                             Log.d(TAG, "result: " + result);
+                            Log.d(TAG, "selected language: " + selectedLanguage);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -126,5 +148,17 @@ public class UploadingActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 });
+    }
+
+    public void showProcessingViews(){
+        mProcessingProgressBar.setVisibility(View.VISIBLE);
+        mProcessingTextView.setVisibility(View.VISIBLE);
+    }
+
+    public void finishProcessingViews(){
+        mProcessingProgressBar.setMax(1);
+        mProcessingProgressBar.setProgress(1);
+
+        mProcessingTextView.setText("Finished.");
     }
 }
