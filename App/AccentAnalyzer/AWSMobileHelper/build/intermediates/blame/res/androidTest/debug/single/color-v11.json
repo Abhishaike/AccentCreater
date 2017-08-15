@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/color-v11/abc_background_cache_hint_selector_material_light.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/color-v11/abc_background_cache_hint_selector_material_light.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/color-v11/abc_background_cache_hint_selector_material_dark.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/color-v11/abc_background_cache_hint_selector_material_dark.xml"
+    }
+]

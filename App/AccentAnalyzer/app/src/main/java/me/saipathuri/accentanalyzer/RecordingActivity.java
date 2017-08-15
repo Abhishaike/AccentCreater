@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobilehelper.auth.IdentityHandler;
+
 import java.io.IOException;
 
 public class RecordingActivity extends AppCompatActivity {
@@ -34,8 +37,7 @@ public class RecordingActivity extends AppCompatActivity {
         mPlayButton = (Button) findViewById(R.id.btn_play);
         mNextButton = (Button) findViewById(R.id.btn_recording_next);
 
-        mFileName = getExternalCacheDir().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+        getUserIdentity();
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,5 +122,29 @@ public class RecordingActivity extends AppCompatActivity {
     private void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
+    }
+
+    private void getUserIdentity(){
+        AWSMobileClient.defaultMobileClient()
+                .getIdentityManager()
+                .getUserID(new IdentityHandler() {
+
+                    @Override
+                    public void onIdentityId(String identityId) {
+                        Log.d(TAG, "identity: " + identityId);
+                        mFileName = getExternalCacheDir().getAbsolutePath();
+                        mFileName += "/"+ identityId +".3gp";
+                    }
+
+                    @Override
+                    public void handleError(Exception exception) {
+
+                        // We failed to retrieve the user's identity. Set unknown user identifier
+                        // in text view. Perhaps there was no network access available.
+
+                        // ... add error handling logic here ...
+                        exception.printStackTrace();
+                    }
+                });
     }
 }

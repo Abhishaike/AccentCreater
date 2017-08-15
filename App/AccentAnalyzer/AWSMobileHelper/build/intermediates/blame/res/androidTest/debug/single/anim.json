@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_fade_in.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_out_bottom.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_popup_exit.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_out_top.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_in_bottom.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_fade_out.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_in_top.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/androidTest/debug/anim/abc_popup_enter.xml",
+        "source": "/Users/saipathuri/.android/build-cache/32b4d68769ad89736ec678f6c82af7b06bfb8d86/output/res/anim/abc_popup_enter.xml"
+    }
+]

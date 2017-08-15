@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/debug/mipmap-xxxhdpi-v4/default_sign_in_logo.png",
+        "source": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/src/main/res/mipmap-xxxhdpi/default_sign_in_logo.png"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/debug/mipmap-xxxhdpi-v4/button_amazon.png",
+        "source": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/src/main/res/mipmap-xxxhdpi/button_amazon.png"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/debug/mipmap-xxxhdpi-v4/button_amazon_pressed.png",
+        "source": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/src/main/res/mipmap-xxxhdpi/button_amazon_pressed.png"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/debug/mipmap-xxxhdpi-v4/button_twitter_pressed.png",
+        "source": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/src/main/res/mipmap-xxxhdpi/button_twitter_pressed.png"
+    },
+    {
+        "merged": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/build/intermediates/res/merged/debug/mipmap-xxxhdpi-v4/button_twitter.png",
+        "source": "/Users/saipathuri/Development/AccentCreater/App/AccentAnalyzer/AWSMobileHelper/src/main/res/mipmap-xxxhdpi/button_twitter.png"
+    }
+]

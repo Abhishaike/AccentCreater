@@ -1,3 +1,25 @@
 <resources>
+
+
+    <!-- CUSTOMIZE THESE FOR YOUR APP -->
+
     <string name="app_name">AccentAnalyzer</string>
+    <!-- Suffix after '-' must be the app package name as specified in the build.gradle file. This
+         is used by the com.amazonaws.mobile.downloader.query.DownloadQueueProvider class. -->
+    <string name="download_queue_provider_authority">com.amazonaws.mobile.downloader-me.saipathuri.accentanalyzer</string>
+    <!-- This can be anything, but it should be unique to the app. -->
+    <string name="content_file_provider_authority">me.saipathuri.accentanalyzer</string>
+
+    <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE -->
+
+    <string name="main_nav_menu_item_home">Home</string>
+    <string name="title_activity_item_detail">Item Detail</string>
+    <string name="title_activity_item_list">Item List</string>
+    <string name="title_activity_main">@string/app_name</string>
+    <string name="button_text_sign_in">SIGN IN</string>
+    <string name="button_text_sign_out">SIGN OUT</string>
+
+    <string name="main_nav_menu_default_user_text">\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
+    <string name="content_helper_error_title">No Content Viewer</string>
+    <string name="content_helper_error_no_app">No Viewing App exists for content type \'%s\'.</string>
 </resources>
