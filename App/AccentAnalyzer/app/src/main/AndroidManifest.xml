@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RecordingActivity" />
+        <activity android:name=".UploadingActivity" />
+        <activity android:name=".ResultActivity"></activity>
     </application>
 
 </manifest>

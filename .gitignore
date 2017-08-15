@@ -10,3 +10,4 @@ App/captures
 App/.externalNativeBuild
 
 *.pyc
+Backend/tmp
