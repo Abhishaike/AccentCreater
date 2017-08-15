@@ -49,64 +49,6 @@ public class UploadingActivity extends AppCompatActivity {
     }
 
     private void upload(){
-//        File file = new File(mFileName);
-//        AndroidNetworking.upload(Constants.URL)
-//                .addMultipartFile("file",file)
-//                .setTag("uploadTest")
-//                .setPriority(Priority.IMMEDIATE)
-//                .build()
-//                .setUploadProgressListener(new UploadProgressListener() {
-//                    @Override
-//                    public void onProgress(long bytesUploaded, long totalBytes) {
-//                        // do anything with progress
-//                        long divisor = totalBytes / 100;
-//                        int progressAmount = (int)(bytesUploaded / divisor);
-//                        mUploadProgressBar.setMax(100);
-//
-//
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            mUploadProgressBar.setProgress(progressAmount, true);
-//                        } else {
-//                            mUploadProgressBar.setProgress(progressAmount);
-//                        }
-//
-//                        Log.d(TAG, "completed " + progressAmount + "%");
-//
-//                        if(progressAmount == 100){
-//                            Toast.makeText(UploadingActivity.this, "Upload Completed.", Toast.LENGTH_SHORT).show();
-//                            Handler handler = new Handler();
-//                            Runnable startActivityRunnable = new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    startActivity(startResultActivityIntent);
-//                                }
-//                            };
-//                            handler.postDelayed(startActivityRunnable, 2000);
-//                        }
-//                    }
-//                })
-//                .getAsJSONObject(new JSONObjectRequestListener() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        // do anything with response
-//                        try {
-//                            String error = response.getString("error");
-//                            String result = response.getString("result");
-//                            startResultActivityIntent.putExtra(Constants.ERROR_KEY, error);
-//                            startResultActivityIntent.putExtra(Constants.RESULTS_KEY, result);
-//
-//                            Log.d(TAG, "error: " + error);
-//                            Log.d(TAG, "result: " + result);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    @Override
-//                    public void onError(ANError error) {
-//                        // handle error
-//                        Log.e(TAG, error.toString());
-//                    }
-//                });
         AWSMobileClient.defaultMobileClient().createUserFileManager(this,
                 AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET,
                 "uploads/",
@@ -115,21 +57,12 @@ public class UploadingActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(UserFileManager userFileManager) {
                         final File file = new File(mFileName);
-                        userFileManager.uploadContent(file, "", new ContentProgressListener() {
+                        userFileManager.uploadContent(file, file.getName(), new ContentProgressListener() {
                             @Override
                             public void onSuccess(ContentItem contentItem) {
-                                //TODO: implement server call
                                 Log.d(TAG, "filename: " + file.getName());
                                 Toast.makeText(UploadingActivity.this, "Upload Completed.", Toast.LENGTH_SHORT).show();
-
-                                Handler handler = new Handler();
-                                Runnable startActivityRunnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(startResultActivityIntent);
-                                    }
-                                };
-                                handler.postDelayed(startActivityRunnable, 2000);
+                                postServer(file.getName());
                             }
 
                             @Override
@@ -153,6 +86,44 @@ public class UploadingActivity extends AppCompatActivity {
                                 ex.printStackTrace();
                             }
                         });
+                    }
+                });
+    }
+
+    public void postServer(String filename){
+        AndroidNetworking.post(Constants.URL)
+                .addBodyParameter("s3_filename", filename)
+                .setPriority(Priority.IMMEDIATE)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // do anything with response
+                        try {
+                            String error = response.getString("error");
+                            String result = response.getString("result");
+                            startResultActivityIntent.putExtra(Constants.ERROR_KEY, error);
+                            startResultActivityIntent.putExtra(Constants.RESULTS_KEY, result);
+
+                            Handler handler = new Handler();
+                            Runnable startActivityRunnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(startResultActivityIntent);
+                                }
+                            };
+                            handler.postDelayed(startActivityRunnable, 2000);
+
+                            Log.d(TAG, "error: " + error);
+                            Log.d(TAG, "result: " + result);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        error.printStackTrace();
                     }
                 });
     }
