@@ -28,11 +28,8 @@ def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shi
         Train_and_Pickle_NN(AllWords_Training, AllAccents_Training)
 
     AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up() #loads all of these variables from the pickled files
-
     AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder) #creates testing data from the previous
-
     AllPredictions_Word = Test(AllWords_Testing, SentenceCreated) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
-
     return AllPredictions_Word
 
 
