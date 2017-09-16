@@ -65,8 +65,8 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
 
 
 def CreateTrainingData():
-    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
-    IBM_PASSWORD = "LKUbYoLjs0V8"
+    IBM_USERNAME = ""
+    IBM_PASSWORD = ""
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Training = []
     AllAccents_Training = []
@@ -126,8 +126,8 @@ def CreateTrainingData():
 
 
 def CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder):
-    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
-    IBM_PASSWORD = "LKUbYoLjs0V8"
+    IBM_USERNAME = ""
+    IBM_PASSWORD = ""
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
