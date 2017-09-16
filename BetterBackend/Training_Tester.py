@@ -22,9 +22,6 @@ import pickle
 
 
 def main(FILEPATH): #currently, WordEncoder is depreciated due to how shitty the sklearn LabelEncoder technique is; unique words in testing data cause errors
-    IBM_USERNAME = ""
-    IBM_PASSWORD = ""
-    stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
         AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = CreateTrainingData()
         Train_and_Pickle_NN(AllWords_Training, AllAccents_Training)
@@ -64,6 +61,9 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
 
 
 def CreateTrainingData():
+    IBM_USERNAME = ""
+    IBM_PASSWORD = ""
+    stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Training = []
     AllAccents_Training = []
     for AccentInfo, AccentName in [(AMERICAN, "AMERICAN"),
@@ -123,6 +123,9 @@ def CreateTrainingData():
 
 
 def CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder):
+    IBM_USERNAME = ""
+    IBM_PASSWORD = ""
+    stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
     AudioSegment.from_file(FILEPATH, "mp4").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
