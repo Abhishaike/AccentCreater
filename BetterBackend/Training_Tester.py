@@ -10,7 +10,7 @@ from keras.models import Sequential
 from keras.models import load_model
 import pandas as pd
 import numpy as np
-from urllib2 import urlopen
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import urllib
 from pydub import AudioSegment
@@ -70,8 +70,8 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder, model):
 
 
 def CreateTrainingData():
-    IBM_USERNAME = ""
-    IBM_PASSWORD = ""
+    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
+    IBM_PASSWORD = "LKUbYoLjs0V8"
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Training = []
     AllAccents_Training = []
@@ -118,13 +118,13 @@ def CreateTrainingData():
     AllAccents_Training = np_utils.to_categorical(AllAccents_Training)  # turns this into a one-hot vector.
 
     with open('AllWords_Training.pkl', 'wb') as f:
-        pickle.dump(AllWords_Training, f)
+        pickle.dump(AllWords_Training, f, protocol=2)
     with open('AllAccents_Training.pkl', 'wb') as f:
-        pickle.dump(AllAccents_Training, f)
+        pickle.dump(AllAccents_Training, f, protocol=2)
     with open('WordEncoder.pkl', 'wb') as f:
-        pickle.dump(WordEncoder, f)
+        pickle.dump(WordEncoder, f, protocol=2)
     with open('AccentEncoder.pkl', 'wb') as f:
-        pickle.dump(AccentEncoder, f)
+        pickle.dump(AccentEncoder, f, protocol=2)
 
     return AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder
 
@@ -136,7 +136,7 @@ def CreateTestingData(FILEPATH, model):
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
-    AudioSegment.from_file(FILEPATH, "mp4").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
+    AudioSegment.from_file(FILEPATH, "wav").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
     audio_file = open('test1.wav', "rb")
     test_result = stt.recognize(audio_file,
                                 content_type="audio/wav",
