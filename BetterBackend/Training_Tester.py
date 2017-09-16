@@ -10,6 +10,7 @@ from keras.models import Sequential
 from keras.models import load_model
 import pandas as pd
 import numpy as np
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import urllib
 from pydub import AudioSegment
@@ -18,11 +19,6 @@ import os
 from sklearn.model_selection import train_test_split
 import h5py
 import pickle
-
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
 
 def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
