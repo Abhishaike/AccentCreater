@@ -10,7 +10,7 @@ from keras.models import Sequential
 from keras.models import load_model
 import pandas as pd
 import numpy as np
-from urllib.request import urlopen
+from urllib2 import urlopen
 from bs4 import BeautifulSoup
 import urllib
 from pydub import AudioSegment

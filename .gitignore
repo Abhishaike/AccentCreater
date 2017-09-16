@@ -11,3 +11,9 @@ App/.externalNativeBuild
 
 *.pyc
 Backend/tmp
+BetterBackend/env/*
+BetterBackend/bin/*
+BetterBackend/lib/*
+BetterBackend/include/*
+.Python
+pip-selfcheck.json

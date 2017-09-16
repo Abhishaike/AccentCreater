@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, redirect, url_for, make_response, jsonify
 import boto3
+import Training_Tester as analyzer
 
 UPLOAD_FOLDER = 'tmp/uploads'
 ALLOWED_EXTENSIONS = set(['wav', 'mp3', 'm4p', '3gp'])
@@ -44,7 +45,8 @@ def download_file(s3_filename, download_location):
 
 def analyze_accent(filepath, selected_language):
 	# TODO: implement actual analysis
-	return 'To Be Implemented'
+	results = analyzer.main(filepath)
+	return results
 
 if __name__ == '__main__':
 	app.run(debug=True)
