@@ -20,31 +20,34 @@ from sklearn.model_selection import train_test_split
 import h5py
 import pickle
 
-
-def main(FILEPATH): #currently, WordEncoder is depreciated due to how shitty the sklearn LabelEncoder technique is; unique words in testing data cause errors
+def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
         AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = CreateTrainingData()
         Train_and_Pickle_NN(AllWords_Training, AllAccents_Training)
 
     AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up() #loads all of these variables from the pickled files
+
     AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder) #creates testing data from the previous
-    AllPredictions_Word = Test(AllWords_Testing, SentenceCreated) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
+
+    AllPredictions_Word = Test(AllWords_Testing, SentenceCreated, AccentEncoder) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
+
     return AllPredictions_Word
 
 
 def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
-    #X_train, X_test, y_train, y_test = train_test_split(AllWords_Training_1, AllAccents_Training_1, test_size = 0.10, random_state = 42, stratify = AllAccents_Training_1)
+    #X_train, X_test, y_train, y_test = train_test_split(AllWords_Training, AllAccents_Training, test_size = 0.10, random_state = 41, stratify = AllAccents_Training)
     model = Sequential()
-    model.add(LSTM(256, activation='sigmoid',recurrent_activation='tanh', stateful=False, return_sequences=True, input_shape=(AllWords_Training.shape[1], AllWords_Training.shape[2])))
+    model.add(LSTM(256, activation='tanh',recurrent_activation='sigmoid', stateful=False, return_sequences=True, input_shape=(AllWords_Training.shape[1], AllWords_Training.shape[2])))
     model.add(Dropout(.7))
-    model.add(LSTM(256, activation='sigmoid',recurrent_activation='tanh', return_sequences=True))
+    model.add(LSTM(256, activation='tanh',recurrent_activation='sigmoid', return_sequences=True))
     model.add(Dropout(.7))
-    model.add(LSTM(256, activation='sigmoid',recurrent_activation='tanh', return_sequences=False))  # false because we want prediction per sequence, not per time-step
+    model.add(LSTM(256, activation='tanh',recurrent_activation='sigmoid', return_sequences=False))  # false because we want prediction per sequence, not per time-step
     model.add(Dropout(.7))
     model.add(Dense(5, activation='softmax'))
     rms = keras.optimizers.RMSprop(lr=0.001)
     model.compile(loss='categorical_crossentropy', optimizer=rms, metrics=['accuracy'])
     model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
+    #model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
 
     model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
 
@@ -52,6 +55,7 @@ def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
 def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
     model = keras.models.load_model('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
     AllPredictions_NoWord = []
+    AllWords_Testing = np.delete(AllWords_Testing, np.s_[-1], axis=2)
     for Word, WordData in enumerate(AllWords_Testing):
         Predictions =  model.predict(np.reshape(WordData,(1, WordData.shape[0], WordData.shape[1])))
         AllPredictions_NoWord.append(list(zip(AccentEncoder.classes_, Predictions[0])))
@@ -61,8 +65,8 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
 
 
 def CreateTrainingData():
-    IBM_USERNAME = ""
-    IBM_PASSWORD = ""
+    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
+    IBM_PASSWORD = "LKUbYoLjs0V8"
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Training = []
     AllAccents_Training = []
@@ -105,7 +109,6 @@ def CreateTrainingData():
     AllWords_Training = keras.preprocessing.sequence.pad_sequences(AllWords_Training, dtype='object', padding = 'pre')
     AllWords_Training = np.delete(AllWords_Training, np.s_[-1], axis=2)
 
-    AllAccents_Training = AllAccents_Training.copy()
     AllAccents_Training.reshape((-1, 1))
     AllAccents_Training = np_utils.to_categorical(AllAccents_Training)  # turns this into a one-hot vector.
 
@@ -123,12 +126,12 @@ def CreateTrainingData():
 
 
 def CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder):
-    IBM_USERNAME = ""
-    IBM_PASSWORD = ""
+    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
+    IBM_PASSWORD = "LKUbYoLjs0V8"
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
-    AudioSegment.from_file(FILEPATH, "mp4").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
+    AudioSegment.from_file(FILEPATH, "wav").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
     audio_file = open('test1.wav', "rb")
     test_result = stt.recognize(audio_file,
                                 content_type="audio/wav",
