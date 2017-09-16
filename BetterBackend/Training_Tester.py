@@ -26,11 +26,8 @@ def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shi
         Train_and_Pickle_NN(AllWords_Training, AllAccents_Training)
 
     AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up() #loads all of these variables from the pickled files
-
     AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder) #creates testing data from the previous
-
     AllPredictions_Word = Test(AllWords_Testing, SentenceCreated, AccentEncoder) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
-
     return AllPredictions_Word
 
 
@@ -50,6 +47,13 @@ def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
     #model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
 
     model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
+    #Preds = []
+    #Truth = []
+    #for item in range(len(x)):
+        #HighestIndices_Pred = np.argmax(x[item])
+        #HighestIndices_Truth = np.argmax(y_test[item])
+        #Preds.append(HighestIndices_Pred)
+        #Truth.append(HighestIndices_Truth)
 
 
 def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
