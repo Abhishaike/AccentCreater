@@ -19,7 +19,7 @@ import os
 from sklearn.model_selection import train_test_split
 import h5py
 
-def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
+def main(FILEPATH): #currently, WordEncoder is depreciated due to how shitty the sklearn LabelEncoder technique is; unique words in testing data cause errors
     IBM_USERNAME = ""
     IBM_PASSWORD = ""
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
