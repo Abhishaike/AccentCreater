@@ -17,3 +17,5 @@ BetterBackend/lib/*
 BetterBackend/include/*
 .Python
 pip-selfcheck.json
+*.3gp
+*.mp4
