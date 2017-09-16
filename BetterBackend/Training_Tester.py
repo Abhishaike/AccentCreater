@@ -27,7 +27,7 @@ def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shi
         return "Didn't have required files, good to go now."
 
     model = keras.models.load_model('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
-    AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up(Accent_Encoder = True) #loads all of these variables from the pickled files, by default, none are returned
+    AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up(Accent_Encoder = True) #loads all of these variables from the pickled files, by default, only AccentEncoder is returned
     AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, model) #creates testing data from the previous
     AllPredictions_Word = Test(AllWords_Testing, SentenceCreated, AccentEncoder, model) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
     return AllPredictions_Word
