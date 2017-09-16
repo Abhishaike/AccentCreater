@@ -18,6 +18,8 @@ import os.path
 import os
 from sklearn.model_selection import train_test_split
 import h5py
+import pickle
+
 
 def main(FILEPATH): #currently, WordEncoder is depreciated due to how shitty the sklearn LabelEncoder technique is; unique words in testing data cause errors
     IBM_USERNAME = ""
