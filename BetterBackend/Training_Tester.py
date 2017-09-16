@@ -34,7 +34,7 @@ def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shi
 
 
 def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
-    X_train, X_test, y_train, y_test = train_test_split(AllWords_Training, AllAccents_Training, test_size = 0.10, random_state = 41, stratify = AllAccents_Training)
+    #X_train, X_test, y_train, y_test = train_test_split(AllWords_Training, AllAccents_Training, test_size = 0.10, random_state = 41, stratify = AllAccents_Training)
     model = Sequential()
     model.add(LSTM(256, activation='tanh',recurrent_activation='sigmoid', stateful=False, return_sequences=True, input_shape=(AllWords_Training.shape[1], AllWords_Training.shape[2])))
     model.add(Dropout(.7))
@@ -45,17 +45,17 @@ def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
     model.add(Dense(5, activation='softmax'))
     rms = keras.optimizers.RMSprop(lr=0.001)
     model.compile(loss='categorical_crossentropy', optimizer=rms, metrics=['accuracy'])
-    #model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
-    model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
+    model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
+    #model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
 
-    model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
-    Preds = []
-    Truth = []
-    for item in range(len(x)):
-        HighestIndices_Pred = np.argmax(x[item])
-        HighestIndices_Truth = np.argmax(y_test[item])
-        Preds.append(HighestIndices_Pred)
-        Truth.append(HighestIndices_Truth)
+    #model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
+    #Preds = []
+    #Truth = []
+    #for item in range(len(x)):
+        #HighestIndices_Pred = np.argmax(x[item])
+        #HighestIndices_Truth = np.argmax(y_test[item])
+        #Preds.append(HighestIndices_Pred)
+        #Truth.append(HighestIndices_Truth)
 
 
 def Test(AllWords_Testing, SentenceCreated, AccentEncoder, model):
