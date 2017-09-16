@@ -17,12 +17,14 @@ def allowed_file(filename):
 def process():
 	if request.method == 'POST':
 		s3_filename = request.form['s3_filename']
+		log(s3_filename)
 		selected_language = request.form['selected_language']
 
 		return process_file(s3_filename, selected_language)
 
 def process_file(s3_filename, selected_language):
-	download_location = "tmp/"+s3_filename+".3gp"
+	download_location = "tmp/"+s3_filename
+	log(download_location)
 	try:
 		download_file(s3_filename, download_location)
 	except Exception as e:
@@ -47,6 +49,9 @@ def analyze_accent(filepath, selected_language):
 	# TODO: implement actual analysis
 	results = analyzer.main(filepath)
 	return results
+
+def log(msg):
+	print msg
 
 if __name__ == '__main__':
 	app.run(debug=True)
