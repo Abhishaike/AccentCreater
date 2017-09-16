@@ -24,15 +24,17 @@ def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shi
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
         AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = CreateTrainingData()
         Train_and_Pickle_NN(AllWords_Training, AllAccents_Training)
+        return "Didn't have required files, good to go now."
 
-    AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up() #loads all of these variables from the pickled files
-    AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder) #creates testing data from the previous
-    AllPredictions_Word = Test(AllWords_Testing, SentenceCreated, AccentEncoder) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
+    model = keras.models.load_model('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
+    AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = Load_Up(Accent_Encoder = True) #loads all of these variables from the pickled files, by default, none are returned
+    AllWords_Testing, SentenceCreated = CreateTestingData(FILEPATH, model) #creates testing data from the previous
+    AllPredictions_Word = Test(AllWords_Testing, SentenceCreated, AccentEncoder, model) #predicts accent labels for all testing data, and return a tuple of (word, array_of_predictions_per_accent)
     return AllPredictions_Word
 
 
 def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
-    #X_train, X_test, y_train, y_test = train_test_split(AllWords_Training, AllAccents_Training, test_size = 0.10, random_state = 41, stratify = AllAccents_Training)
+    X_train, X_test, y_train, y_test = train_test_split(AllWords_Training, AllAccents_Training, test_size = 0.10, random_state = 41, stratify = AllAccents_Training)
     model = Sequential()
     model.add(LSTM(256, activation='tanh',recurrent_activation='sigmoid', stateful=False, return_sequences=True, input_shape=(AllWords_Training.shape[1], AllWords_Training.shape[2])))
     model.add(Dropout(.7))
@@ -43,21 +45,20 @@ def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
     model.add(Dense(5, activation='softmax'))
     rms = keras.optimizers.RMSprop(lr=0.001)
     model.compile(loss='categorical_crossentropy', optimizer=rms, metrics=['accuracy'])
-    model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
-    #model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
+    #model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
+    model.fit(X_train, y_train, epochs = 40, batch_size=200, verbose=2, validation_data = (X_test, y_test))
 
     model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
-    #Preds = []
-    #Truth = []
-    #for item in range(len(x)):
-        #HighestIndices_Pred = np.argmax(x[item])
-        #HighestIndices_Truth = np.argmax(y_test[item])
-        #Preds.append(HighestIndices_Pred)
-        #Truth.append(HighestIndices_Truth)
+    Preds = []
+    Truth = []
+    for item in range(len(x)):
+        HighestIndices_Pred = np.argmax(x[item])
+        HighestIndices_Truth = np.argmax(y_test[item])
+        Preds.append(HighestIndices_Pred)
+        Truth.append(HighestIndices_Truth)
 
 
-def Test(AllWords_Testing, SentenceCreated, AccentEncoder):
-    model = keras.models.load_model('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
+def Test(AllWords_Testing, SentenceCreated, AccentEncoder, model):
     AllPredictions_NoWord = []
     AllWords_Testing = np.delete(AllWords_Testing, np.s_[-1], axis=2)
     for Word, WordData in enumerate(AllWords_Testing):
@@ -129,7 +130,7 @@ def CreateTrainingData():
 
 
 
-def CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder):
+def CreateTestingData(FILEPATH, model):
     IBM_USERNAME = ""
     IBM_PASSWORD = ""
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
@@ -153,7 +154,7 @@ def CreateTestingData(FILEPATH, AllWords_Training, WordEncoder, AccentEncoder):
         #for Row in range(len(AllWords_Testing[Word])):
             #AllWords_Testing[Word][Row][-1] = WordEncoder.fit_transform([AllWords_Testing[Word][Row][-1]])[0]
 
-    AllWords_Testing = keras.preprocessing.sequence.pad_sequences(AllWords_Testing, maxlen = AllWords_Training.shape[1], dtype='object', padding = 'post')
+    AllWords_Testing = keras.preprocessing.sequence.pad_sequences(AllWords_Testing, maxlen = model._flattened_layers[0].batch_input_shape[1], dtype='object', padding = 'post')
 
     return AllWords_Testing, SentenceCreated
 
@@ -188,14 +189,29 @@ def FeatureExtractor(Words, sound_file): #extracts MFCC and word features from a
 
 
 
-def Load_Up():
-    with open('AllWords_Training.pkl', 'rb') as f:
-        AllWords_Training = pickle.load(f)
-    with open('AllAccents_Training.pkl', 'rb') as f:
-        AllAccents_Training = pickle.load(f)
-    with open('WordEncoder.pkl', 'rb') as f:
-        WordEncoder = pickle.load(f)
-    with open('AccentEncoder.pkl', 'rb') as f:
-        AccentEncoder = pickle.load(f)
+def Load_Up(Words = False, Accent = False, Word_Encoder = False, Accent_Encoder = False):
+    if Words:
+        with open('AllWords_Training.pkl', 'rb') as f:
+            AllWords_Training = pickle.load(f)
+    else:
+        AllWords_Training = 0
+
+    if Accent:
+        with open('AllAccents_Training.pkl', 'rb') as f:
+            AllAccents_Training = pickle.load(f)
+    else:
+        AllAccents_Training = 0
+
+    if Word_Encoder:
+        with open('WordEncoder.pkl', 'rb') as f:
+            WordEncoder = pickle.load(f)
+    else:
+        WordEncoder = 0
+
+    if Accent_Encoder:
+        with open('AccentEncoder.pkl', 'rb') as f:
+            AccentEncoder = pickle.load(f)
+    else:
+        AccentEncoder = 0
 
     return AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder
