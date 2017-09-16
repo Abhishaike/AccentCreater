@@ -45,7 +45,7 @@ def Train_and_Pickle_NN(AllWords_Training, AllAccents_Training) :
     model.add(Dense(5, activation='softmax'))
     rms = keras.optimizers.RMSprop(lr=0.001)
     model.compile(loss='categorical_crossentropy', optimizer=rms, metrics=['accuracy'])
-    model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2, validation_data = (X_test, y_test))
+    model.fit(AllWords_Training, AllAccents_Training, epochs = 30, batch_size=200, verbose=2)
 
     model.save('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5')
 
