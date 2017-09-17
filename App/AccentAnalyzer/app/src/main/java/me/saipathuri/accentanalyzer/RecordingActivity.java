@@ -114,7 +114,7 @@ public class RecordingActivity extends AppCompatActivity {
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mRecorder.setOutputFile(mFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
@@ -159,7 +159,7 @@ public class RecordingActivity extends AppCompatActivity {
                     public void onIdentityId(String identityId) {
                         Log.d(TAG, "identity: " + identityId);
                         mFileName = getExternalCacheDir().getAbsolutePath();
-                        mFileName += "/"+ identityId +".3gp";
+                        mFileName += "/"+ identityId +".mp4";
                     }
 
                     @Override
