@@ -19,6 +19,7 @@ from sklearn.model_selection import train_test_split
 import h5py
 import pickle
 
+# urlopen compatibility w python2 and python3
 try:
     from urllib.request import urlopen
 except ImportError:
