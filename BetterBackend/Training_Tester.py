@@ -25,6 +25,9 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
+# set ffmpeg location for AudioSegment
+AudioSegment.converter = "ffmpeg/ffmpeg"
+
 def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
         AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = CreateTrainingData()
