@@ -11,11 +11,9 @@ import org.w3c.dom.Text;
 public class ResultActivity extends AppCompatActivity {
     private String mResult;
     private String mError;
-    private String mSelectedLanguage;
 
     private TextView mResultTextView;
     private TextView mErrorTextView;
-    private TextView mLanguageTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +24,12 @@ public class ResultActivity extends AppCompatActivity {
 
         mResult = intentThatStartedThisActivty.getStringExtra(Constants.RESULTS_KEY);
         mError = intentThatStartedThisActivty.getStringExtra(Constants.ERROR_KEY);
-        mSelectedLanguage = intentThatStartedThisActivty.getStringExtra(Constants.SELECTED_LANGUAGE_KEY);
 
         mResultTextView = (TextView) findViewById(R.id.tv_result_result);
         mErrorTextView = (TextView) findViewById(R.id.tv_result_error);
-        mLanguageTextView = (TextView) findViewById(R.id.tv_result_language);
 
         mResultTextView.setText(mResult);
         mErrorTextView.setText(mError);
-        mLanguageTextView.setText(mSelectedLanguage);
 
         if(!mError.equals("none")){
             showError();
