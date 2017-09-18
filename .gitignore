@@ -19,3 +19,4 @@ BetterBackend/include/*
 pip-selfcheck.json
 *.3gp
 *.mp4
+launch.sh
