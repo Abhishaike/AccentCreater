@@ -28,6 +28,12 @@ except ImportError:
 # set ffmpeg location for AudioSegment
 AudioSegment.converter = "ffmpeg/ffmpeg"
 
+# get IBM credentials
+IBM_USERNAME = os.environ.get(IBM_USERNAME, None)
+IBM_PASSWORD = os.environ.get(IBM_PASSWORD, None)
+if type(IBM_USERNAME) is None or type(IBM_USERNAME) is None:
+    raise Exception("Could not find IBM info")
+
 def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
     if not os.path.exists('LSTM_MODEL_ARCHITECTURE_WEIGHTS.h5'): #if model doesnt exist, get the model created and trained
         AllWords_Training, AllAccents_Training, WordEncoder, AccentEncoder = CreateTrainingData()
@@ -78,8 +84,8 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder, model):
 
 
 def CreateTrainingData():
-    IBM_USERNAME = "7005ab23-1d45-4e62-b0cf-923ed79e3ed5"
-    IBM_PASSWORD = "LKUbYoLjs0V8"
+    global IBM_USERNAME
+    global IBM_PASSWORD
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Training = []
     AllAccents_Training = []
@@ -139,8 +145,8 @@ def CreateTrainingData():
 
 
 def CreateTestingData(FILEPATH, model):
-    IBM_USERNAME = ""
-    IBM_PASSWORD = ""
+    global IBM_USERNAME
+    global IBM_PASSWORD
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
