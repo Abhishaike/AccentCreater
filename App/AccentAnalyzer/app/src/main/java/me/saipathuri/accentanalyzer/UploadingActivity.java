@@ -27,6 +27,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 public class UploadingActivity extends AppCompatActivity {
 
@@ -107,9 +110,15 @@ public class UploadingActivity extends AppCompatActivity {
     }
 
     public void postServer(String filename){
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
         AndroidNetworking.post(Constants.URL)
                 .addBodyParameter(Constants.SERVER_REQUEST_FILENAME_KEY, filename)
                 .addBodyParameter(Constants.SERVER_REQUEST_SELECTED_LANGUAGE_KEY, mSelectedLanguage)
+                .setOkHttpClient(okHttpClient)
                 .setPriority(Priority.IMMEDIATE)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -119,11 +128,9 @@ public class UploadingActivity extends AppCompatActivity {
                         try {
                             String error = response.getString(Constants.SERVER_RESPONSE_ERROR_KEY);
                             String result = response.getString(Constants.SERVER_RESPONSE_ACCENT_KEY);
-                            String selectedLanguage = response.getString(Constants.SERVER_RESPONSE_COMPARED_LANGUAGE_KEY);
 
                             startResultActivityIntent.putExtra(Constants.ERROR_KEY, error);
                             startResultActivityIntent.putExtra(Constants.RESULTS_KEY, result);
-                            startResultActivityIntent.putExtra(Constants.SELECTED_LANGUAGE_KEY, selectedLanguage);
 
                             finishProcessingViews();
                             Handler handler = new Handler();
@@ -137,7 +144,6 @@ public class UploadingActivity extends AppCompatActivity {
 
                             Log.d(TAG, "error: " + error);
                             Log.d(TAG, "result: " + result);
-                            Log.d(TAG, "selected language: " + selectedLanguage);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
