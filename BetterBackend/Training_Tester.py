@@ -182,7 +182,6 @@ def FeatureExtractor(Words, sound_file): #extracts MFCC and word features from a
     EndTime = Words[2] * 1000
 
     WantedAudio = sound_file[StartTime:EndTime]  # segment the audio file to include the word specified by the above for loop
-    WantedAudio.export('Junk/audio_%s.wav' % Word)
     RATE_INPUT = WantedAudio.frame_rate
     SIG_INPUT = np.array(WantedAudio.get_array_of_samples())  # get rate and signal array from the segment
 
