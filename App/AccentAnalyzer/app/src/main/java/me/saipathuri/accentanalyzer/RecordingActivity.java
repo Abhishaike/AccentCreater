@@ -114,10 +114,10 @@ public class RecordingActivity extends AppCompatActivity {
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-        mRecorder.setAudioEncodingBitRate(96000);
         mRecorder.setAudioSamplingRate(44100);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setAudioEncodingBitRate(96000);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
         mRecorder.setOutputFile(mFileName);
 
         try {
@@ -161,7 +161,7 @@ public class RecordingActivity extends AppCompatActivity {
                     public void onIdentityId(String identityId) {
                         Log.d(TAG, "identity: " + identityId);
                         mFileName = getExternalCacheDir().getAbsolutePath();
-                        mFileName += "/"+ identityId +".mp4";
+                        mFileName += "/"+ identityId +".3gp";
                     }
 
                     @Override
