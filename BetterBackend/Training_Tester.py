@@ -29,8 +29,8 @@ except ImportError:
 AudioSegment.converter = "ffmpeg/ffmpeg"
 
 # get IBM credentials
-IBM_USERNAME = os.environ.get(IBM_USERNAME, None)
-IBM_PASSWORD = os.environ.get(IBM_PASSWORD, None)
+IBM_USERNAME = os.environ.get("IBM_USERNAME", None)
+IBM_PASSWORD = os.environ.get("IBM_PASSWORD", None)
 if type(IBM_USERNAME) is None or type(IBM_USERNAME) is None:
     raise Exception("Could not find IBM info")
 
@@ -150,7 +150,7 @@ def CreateTestingData(FILEPATH, model):
     stt = SpeechToTextV1(username=IBM_USERNAME, password=IBM_PASSWORD)
     AllWords_Testing = []
     SentenceCreated = []
-    AudioSegment.from_file(FILEPATH, "mp4").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
+    AudioSegment.from_file(FILEPATH, "3gp").export("test1.wav",format="wav")  # open link, save it to a dummy .mp3 file, convert to .wav, and get audiosegment of it
     audio_file = open('test1.wav', "rb")
     test_result = stt.recognize(audio_file,
                                 content_type="audio/wav",
