@@ -25,33 +25,12 @@
         tools:text="American" />
 
     <TextView
-        android:id="@+id/tv_result_language_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tv_result_result_title"
-        android:text="Compared to:"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/tv_result_language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_result_result"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/tv_result_language_title"
-        android:layout_toRightOf="@id/tv_result_language_title"
-        android:textSize="24sp"
-        tools:text="American" />
-
-    <TextView
         android:id="@+id/tv_result_error_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/tv_result_language_title"
+        android:layout_below="@id/tv_result_result_title"
         android:text="Error:"
         android:textSize="24sp"
         android:visibility="invisible"/>
@@ -60,7 +39,7 @@
         android:id="@+id/tv_result_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_result_language"
+        android:layout_below="@id/tv_result_result"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/tv_result_error_title"
@@ -68,5 +47,13 @@
         android:textSize="24sp"
         tools:text="None"
         android:visibility="invisible"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Over"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_start_over"/>
 
 </RelativeLayout>
