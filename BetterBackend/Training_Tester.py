@@ -31,7 +31,7 @@ AudioSegment.converter = "ffmpeg/ffmpeg"
 # get IBM credentials
 IBM_USERNAME = os.environ.get("IBM_USERNAME", None)
 IBM_PASSWORD = os.environ.get("IBM_PASSWORD", None)
-if type(IBM_USERNAME) is None or type(IBM_USERNAME) is None:
+if IBM_USERNAME is None or IBM_USERNAME is None:
     raise Exception("Could not find IBM info")
 
 def main(FILEPATH): #currently, WordEncoder is depreciated due to shitty the shitty sklearn LabelEncoder technique; unique words in testing data cause errors
