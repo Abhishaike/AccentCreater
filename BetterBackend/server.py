@@ -1,17 +1,9 @@
 import os
 from flask import Flask, request, redirect, url_for, make_response, jsonify
 import boto3
-import Training_Tester as analyzer
-
-UPLOAD_FOLDER = 'tmp/uploads'
-ALLOWED_EXTENSIONS = set(['wav', 'mp3', 'm4p', '3gp'])
+import accent_analyzer as analyzer
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-	return '.' in filename and \
-		   filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['POST'])
 def process():
@@ -46,11 +38,10 @@ def download_file(s3_filename, download_location):
 	
 
 def analyze_accent(filepath):
-	# TODO: implement actual analysis
 	log(filepath)
 	relative_filepath = './{0}'.format(filepath)
 	results = analyzer.main(filepath)
-	return results
+	return str(results)
 
 def log(msg):
 	print msg
