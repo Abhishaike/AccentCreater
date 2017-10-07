@@ -21,3 +21,6 @@ pip-selfcheck.json
 *.mp4
 launch.sh
 *.wav
+BetterBackend/lambda_site-packages/*
+BetterBackend/environments/*
+
