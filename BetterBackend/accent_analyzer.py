@@ -9,9 +9,12 @@ from pydub import AudioSegment
 import numpy as np
 import os
 import h5py
+import librosa
+import pandas as pd
 
 # set ffmpeg location for AudioSegment
-AudioSegment.converter = "ffmpeg/ffmpeg"
+AudioSegment.ffmpeg = "./ffmpeg/ffmpeg"
+AudioSegment.converter = "./ffmpeg/ffmpeg"
 
 # get IBM credentials
 IBM_USERNAME = os.environ.get("IBM_USERNAME", None)
@@ -93,3 +96,27 @@ def Test(AllWords_Testing, SentenceCreated, AccentEncoder, model):
 
     AllPredictions_Word = list(zip(SentenceCreated, AllPredictions_NoWord))
     return AllPredictions_Word
+
+def FeatureExtractor(Words, sound_file): #extracts MFCC and word features from audio
+    Word = Words[0]
+    StartTime = Words[1] * 1000
+    EndTime = Words[2] * 1000
+
+    WantedAudio = sound_file[StartTime:EndTime]  # segment the audio file to include the word specified by the above for loop
+    RATE_INPUT = WantedAudio.frame_rate
+    SIG_INPUT = np.array(WantedAudio.get_array_of_samples())  # get rate and signal array from the segment
+
+    ACCENT_MFCC_INPUT = librosa.feature.mfcc(y=SIG_INPUT, sr=RATE_INPUT, n_mfcc=20)  # get MFCC of the signal
+    ACCENT_DELTA_INPUT = librosa.feature.delta(ACCENT_MFCC_INPUT, order=1)  # get delta of the signal
+    ACCENT_DELTA_2_INPUT = librosa.feature.delta(ACCENT_MFCC_INPUT, order=2)  # get delta of the signal
+
+    NewWord = pd.concat([pd.DataFrame(ACCENT_MFCC_INPUT).transpose(),
+                         pd.DataFrame(ACCENT_DELTA_INPUT).transpose(),
+                         pd.DataFrame(ACCENT_DELTA_2_INPUT).transpose(),
+                         pd.DataFrame(Word,
+                                      index=np.arange(0, len(ACCENT_MFCC_INPUT.transpose())),
+                                      columns=np.arange(1))],
+                        axis=1,
+                        ignore_index=True)  # combine the array into a single dataframe including the MFCC, Delta, Word used to derive the MFCC/Delta, and the accent used
+
+    return NewWord
